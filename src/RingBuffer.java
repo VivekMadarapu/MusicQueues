@@ -1,15 +1,17 @@
-public class RingBuffer<T> {
+public class RingBuffer {
 
     private int front;
+    private int back;
     private int size;
-    private T[] buffer;
+    private double[] buffer;
 
 
     // create an empty ring buffer, with given max capacity
     public RingBuffer(int capacity) {
         size = 0;
         front = 0;
-        buffer = (T[]) new Object[capacity];
+        back = -1;
+        buffer = new double[capacity];
     }
 
     // return number of items currently in the buffer
@@ -18,40 +20,46 @@ public class RingBuffer<T> {
     }
 
     // add item x to the end
-    public void enqueue(T value) {
+    public void enqueue(double value) {
         if (!this.isFull()) {
-            buffer[front%size] = value;
-            if(front == this.size()-1){
-                front = 0;
+            if(back == buffer.length-1) {
+                back = 0;
+                buffer[back] = value;
             }
             else{
-                front++;
+                back++;
+                buffer[back] = value;
             }
             size++;
+        }
+        else{
+            throw new IllegalStateException("enqueued full buffer");
         }
     }
 
     // delete and return item from the front
-    public T dequeue() {
+    public double dequeue() {
         if (!this.isEmpty()) {
-            T tempFront = buffer[front];
-            buffer[front] = null;
+            double tempFront = buffer[front];
+            buffer[front] = 0.0;
             size--;
-            if(front != 0){
-                front--;
+            if(front == buffer.length-1){
+                front = 0;
             }
-
+            else {
+                front++;
+            }
             return tempFront;
         }
         throw new IllegalStateException("dequeued empty buffer");
     }
 
     // return (but do not delete) item from the front
-    public T peek() {
+    public double peek() {
         if (!this.isEmpty()) {
             return buffer[front];
         }
-        throw new IllegalStateException("peeked empty buffer");
+        throw new NullPointerException("peeked empty buffer");
     }
 
     // is the buffer empty (size equals zero)?

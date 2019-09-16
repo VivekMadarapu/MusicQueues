@@ -1,13 +1,17 @@
 public class GuitarString {
 
+    private RingBuffer string;
+
     // create a guitar string of the given frequency, using a sampling rate of 44,100
     GuitarString(double frequency){
-
+        string = new RingBuffer((int) Math.ceil(44100/frequency));
     }
 
     // create a guitar string whose size and initial values are given by the array
     GuitarString(double[] init){
-
+        for(int i = 0; i < init.length;i++){
+            string.enqueue(init[i]);
+        }
     }
 
     // set the buffer to white noise
