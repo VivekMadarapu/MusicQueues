@@ -1,15 +1,4 @@
-/*****************************************************************************
- *  Compilation:  javac GuitarHeroLite.java
- *  Execution:    java  GuitarHeroLite
- *  Dependencies: StdAudio.java StdDraw.java GuitarString.java
- *
- *  Plays two guitar strings (concert A and concert C) when the user
- *  types the lowercase letters 'a' and 'c', respectively in the 
- *  standard drawing window.
- *
- ****************************************************************************/
-
-public class GuitarHeroLite { 
+public class GuitarHeroLite {
 
     public static void main(String[] args) {
 
@@ -25,7 +14,7 @@ public class GuitarHeroLite {
 
             // check if the user has typed a key, and, if so, process it
             if (StdDraw.hasNextKeyTyped()) {
- 
+
                 // the user types this character
                 char key = StdDraw.nextKeyTyped();
 
