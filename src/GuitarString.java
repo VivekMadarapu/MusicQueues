@@ -2,7 +2,7 @@ public class GuitarString {
 
     private RingBuffer string;
     private int N;
-    private double EDF = 0.994;
+    private double EDF = 0.944;
     private int numTics = 0;
 
     // create a guitar string of the given frequency, using a sampling rate of 44,100
@@ -17,6 +17,7 @@ public class GuitarString {
     // create a guitar string whose size and initial values are given by the array
     GuitarString(double[] init){
         N = init.length;
+        string = new RingBuffer(N);
         for (double v : init) {
             string.enqueue(v);
         }
