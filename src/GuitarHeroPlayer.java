@@ -31,6 +31,7 @@ public class GuitarHeroPlayer {
 
                 if (key.length() == 1 && indexOfKeyboard != -1) {
                     notes[keyboard.indexOf(key)].pluck();
+                    System.out.print(key + " ");
                 } else if (key.length() != 1) {
                     curPause = Integer.parseInt(key);
                 }
