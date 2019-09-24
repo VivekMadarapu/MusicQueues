@@ -1,1 +1,130 @@
- 255255 q 38219 w 13649 w 24569 q 24569 w 25934 q 49139 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+class Main {
+
+    public static void main(String[] args) {
+
+        Scanner file;
+        
+        try {
+            file = new Scanner(new File("confused.dat"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        int numCalcs = file.nextInt();
+        file.nextLine();
+
+        while (numCalcs > 0) {
+            Scanner line = new Scanner(file.nextLine());
+            line.useDelimiter("");
+            boolean isValid = true;
+            ArrayStack<String> parenthesesStack = new ArrayStack<String>(128);
+            ArrayStack<String> bracketStack = new ArrayStack<String>(128);
+            while (line.hasNext() && isValid) {
+                String val = line.next();
+                switch (val) {
+                    case "(":
+                        parenthesesStack.push(val);
+                        break;
+                    case ")":
+                        if (parenthesesStack.isEmpty()) {
+                            isValid = false;
+                            break;
+                        }
+                        parenthesesStack.pop();
+                        break;
+                    case "[":
+                        bracketStack.push(val);
+                        break;
+                    case "]":
+                        if (bracketStack.isEmpty()) {
+                            isValid = false;
+                            break;
+                        }
+                        bracketStack.pop();
+                        break;
+                }
+            }
+            if (isValid && parenthesesStack.isEmpty() && bracketStack.isEmpty()) {
+                System.out.println("Yes");
+            } else {
+                System.out.println("No");
+            }
+            parenthesesStack.clear();
+            bracketStack.clear();
+            numCalcs--;
+    }
+}
+
+
+class ArrayStack<T> {
+
+    private int top;
+    private T[] stack;
+
+    public ArrayStack(int size){
+        top = -1;
+        stack = (T[]) new Object[size];
+    }
+
+    public void push(T value) {
+        if(!this.isFull()) {
+            stack[top + 1] = value;
+            top++;
+        }
+    }
+
+    public T pop() {
+        if(!this.isEmpty()) {
+            T tempTop = stack[top];
+            stack[top] = null;
+            top--;
+            return tempTop;
+        }
+        throw new IllegalStateException("popped empty stack");
+    }
+
+    public T peek() {
+        if(top >= 0){
+            return stack[top];
+        }
+        throw new IllegalStateException("peeked empty stack");
+    }
+
+    public int size() {
+        return top+1;
+    }
+
+    public boolean isEmpty() {
+        return top==-1;
+    }
+
+    public boolean isFull() {
+        return top==stack.length-1;
+    }
+
+    public void clear() {
+        top = -1;
+        stack = (T[]) new Object[10];
+    }
+
+    public String ArrayToString() {
+
+        for(T i : stack){
+            System.out.print(i + ", ");
+        }
+        return null;
+    }
+
+    public String toString(){
+        for(int i = 0; i <= top; i++) {
+            System.out.print(stack[i] + ", ");
+        }
+        return null;
+    }
+
+
+}
