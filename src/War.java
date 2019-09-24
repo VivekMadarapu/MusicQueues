@@ -101,7 +101,7 @@ public class War {
                     table.enqueue(p2);
                 }
 
-
+                numTurns++;
             }
 
             if(numTurns >= 100000){
