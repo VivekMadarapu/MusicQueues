@@ -2,7 +2,7 @@ public class GuitarString {
 
     private RingBuffer string;
     private int N;
-    private double EDF = 0.999;
+    private double EDF = 0.988;
     private int numTics = 0;
 
     // create a guitar string of the given frequency, using a sampling rate of 44,100
