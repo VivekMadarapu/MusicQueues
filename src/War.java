@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class War {
@@ -14,12 +16,12 @@ public class War {
 
         RingBuffer player1;
         RingBuffer player2;
-        RingBuffer table;
+        List<Double> table;
 
         while (file.hasNextLine()){
             player1 = new RingBuffer(104);
             player2 = new RingBuffer(104);
-            table = new RingBuffer(104);
+            table = new ArrayList<>();
             Scanner line = new Scanner(file.nextLine());
             while (line.hasNext()){
                 char cardValue = line.next().charAt(0);
@@ -63,7 +65,7 @@ public class War {
                         player2.enqueue(14);
                         break;
                     default:
-                        player2.enqueue(Double.parseDouble(cardValue+""));
+                        player2.enqueue(Integer.parseInt(cardValue+""));
                 }
             }
 
@@ -85,20 +87,23 @@ public class War {
                 if(p1 > p2){
                     player1.enqueue(p1);
                     player1.enqueue(p2);
-                    for(int i = 0;i < table.size();i++){
-                        player1.enqueue(table.dequeue());
+                    while (!table.isEmpty()){
+                        player1.enqueue(table.get(table.size()-1));
+                        table.remove(table.size()-1);
                     }
                 }
                 else if(p2 > p1){
                     player2.enqueue(p1);
                     player2.enqueue(p2);
-                    for(int i = 0;i < table.size();i++){
-                        player2.enqueue(table.dequeue());
+                    while(!table.isEmpty()){
+                        player2.enqueue(table.get(table.size()-1));
+
+                        table.remove(table.size()-1);
                     }
                 }
                 else{
-                    table.enqueue(p1);
-                    table.enqueue(p2);
+                    table.add(p1);
+                    table.add(p2);
                 }
 
                 numTurns++;
