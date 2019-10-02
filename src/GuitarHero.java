@@ -15,10 +15,10 @@ public class GuitarHero {
         }
 
         File file = new File("music.txt");
-        int ver = 0;
+        int version = 0;
         while (file.exists()) {
-            ver++;
-            file = new File("music"+ ver +".txt");
+            version++;
+            file = new File("music"+ version +".txt");
         }
 
         file.createNewFile();
