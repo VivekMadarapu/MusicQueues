@@ -16,12 +16,12 @@ public class War {
 
         RingBuffer player1;
         RingBuffer player2;
-        List<Double> table;
+        RingBuffer table;
 
         while (file.hasNextLine()){
-            player1 = new RingBuffer(104);
-            player2 = new RingBuffer(104);
-            table = new ArrayList<>();
+            player1 = new RingBuffer(52);
+            player2 = new RingBuffer(52);
+            table = new RingBuffer(52);
             Scanner line = new Scanner(file.nextLine());
             while (line.hasNext()){
                 char cardValue = line.next().charAt(0);
@@ -72,11 +72,11 @@ public class War {
             int numTurns = 0;
             while(numTurns < 100000){
 
-                if(player1.isEmpty()){
+                if(player1.isEmpty() || player2.isFull()){
                     System.out.println("Player 2 wins!");
                     break;
                 }
-                else if(player2.isEmpty()){
+                else if(player2.isEmpty() || player1.isFull()){
                     System.out.println("Player 1 wins!");
                     break;
                 }
@@ -85,25 +85,26 @@ public class War {
                 double p2 = player2.dequeue();
 
                 if(p1 > p2){
+                    while (!table.isEmpty()){
+                        player1.enqueue(table.dequeue());
+                    }
                     player1.enqueue(p1);
                     player1.enqueue(p2);
-                    while (!table.isEmpty()){
-                        player1.enqueue(table.get(table.size()-1));
-                        table.remove(table.size()-1);
-                    }
+                    System.out.println("Player 1 Wins");
                 }
                 else if(p2 > p1){
+                    while (!table.isEmpty()){
+                        player2.enqueue(table.dequeue());
+                    }
                     player2.enqueue(p1);
                     player2.enqueue(p2);
-                    while(!table.isEmpty()){
-                        player2.enqueue(table.get(table.size()-1));
-
-                        table.remove(table.size()-1);
-                    }
+                    System.out.println("Player 2 Wins");
                 }
                 else{
-                    table.add(p1);
-                    table.add(p2);
+                    table.enqueue(p1);
+                    table.enqueue(p2);
+
+                    System.out.println("Tie");
                 }
 
                 numTurns++;
