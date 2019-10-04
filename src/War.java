@@ -31,7 +31,6 @@ public class War {
 
             int numTurns = 0;
             while(numTurns < 100000){
-
                 if(player1.isEmpty()){
                     System.out.println("Player 2 wins!");
                     break;
