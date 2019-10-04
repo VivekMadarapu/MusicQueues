@@ -1,3 +1,6 @@
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+
 public class RingBuffer {
 
     private int front;
@@ -33,7 +36,7 @@ public class RingBuffer {
             size++;
         }
         else{
-            throw new IllegalStateException("enqueued full buffer");
+            throw new BufferOverflowException();
         }
     }
 
@@ -51,7 +54,7 @@ public class RingBuffer {
             }
             return tempFront;
         }
-        throw new IllegalStateException("dequeued empty buffer");
+        throw new BufferUnderflowException();
     }
 
     // return (but do not delete) item from the front

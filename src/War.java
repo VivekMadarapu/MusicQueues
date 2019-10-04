@@ -1,7 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class War {
@@ -16,67 +14,28 @@ public class War {
 
         RingBuffer player1;
         RingBuffer player2;
-        RingBuffer table;
 
-        while (file.hasNextLine()){
+        assert file != null;
+        while (file.hasNext()){
             player1 = new RingBuffer(52);
             player2 = new RingBuffer(52);
-            table = new RingBuffer(52);
+            String values = "0023456789TJQKA";
             Scanner line = new Scanner(file.nextLine());
             while (line.hasNext()){
-                char cardValue = line.next().charAt(0);
-                switch (cardValue){
-                    case 'T':
-                        player1.enqueue(10);
-                        break;
-                    case 'J':
-                        player1.enqueue(11);
-                        break;
-                    case 'Q':
-                        player1.enqueue(12);
-                        break;
-                    case 'K':
-                        player1.enqueue(13);
-                        break;
-                    case 'A':
-                        player1.enqueue(14);
-                        break;
-                    default:
-                        player1.enqueue(Integer.parseInt(cardValue+""));
-                }
+                player1.enqueue(values.indexOf(line.next().charAt(0)));
             }
             line = new Scanner(file.nextLine());
             while (line.hasNext()){
-                char cardValue = line.next().charAt(0);
-                switch (cardValue){
-                    case 'T':
-                        player2.enqueue(10);
-                        break;
-                    case 'J':
-                        player2.enqueue(11);
-                        break;
-                    case 'Q':
-                        player2.enqueue(12);
-                        break;
-                    case 'K':
-                        player2.enqueue(13);
-                        break;
-                    case 'A':
-                        player2.enqueue(14);
-                        break;
-                    default:
-                        player2.enqueue(Integer.parseInt(cardValue+""));
-                }
+                player2.enqueue(values.indexOf(line.next().charAt(0)));
             }
 
             int numTurns = 0;
             while(numTurns < 100000){
-
-                if(player1.isEmpty() || player2.isFull()){
+                if(player1.isEmpty()){
                     System.out.println("Player 2 wins!");
                     break;
                 }
-                else if(player2.isEmpty() || player1.isFull()){
+                else if(player2.isEmpty()){
                     System.out.println("Player 1 wins!");
                     break;
                 }
@@ -85,40 +44,43 @@ public class War {
                 double p2 = player2.dequeue();
 
                 if(p1 > p2){
-                    while (!table.isEmpty()){
-                        player1.enqueue(table.dequeue());
-                    }
                     player1.enqueue(p1);
                     player1.enqueue(p2);
-                    System.out.println("Player 1 Wins");
                 }
                 else if(p2 > p1){
-                    while (!table.isEmpty()){
-                        player2.enqueue(table.dequeue());
-                    }
                     player2.enqueue(p1);
                     player2.enqueue(p2);
-                    System.out.println("Player 2 Wins");
                 }
                 else{
-                    table.enqueue(p1);
-                    table.enqueue(p2);
-
-                    System.out.println("Tie");
+                    RingBuffer table = new RingBuffer(52);
+                    do {
+                        table.enqueue(p1);
+                        table.enqueue(p2);
+                        table.enqueue(player1.dequeue());
+                        table.enqueue(player2.dequeue());
+                        p1 = player1.dequeue();
+                        p2 = player2.dequeue();
+                    }while(p1 == p2);
+                    if(p1 > p2){
+                        while(!table.isEmpty()){
+                            player1.enqueue(table.dequeue());
+                        }
+                        player1.enqueue(p1);
+                        player1.enqueue(p2);
+                    }
+                    else if(p2 > p1){
+                        while(!table.isEmpty()){
+                            player2.enqueue(table.dequeue());
+                        }
+                        player2.enqueue(p1);
+                        player2.enqueue(p2);
+                    }
                 }
-
                 numTurns++;
             }
-
             if(numTurns >= 100000){
                 System.out.println("Tie game stopped at 100000 plays.");
             }
-
         }
-
-
-
     }
-
-
 }
