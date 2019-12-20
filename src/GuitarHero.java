@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,6 +11,9 @@ public class GuitarHero {
 
         GuitarString[] notes = new GuitarString[37];
 
+
+        StdDraw.setCanvasSize(500, 500);
+
         for (int i = 0; i < 37; i++) {
             notes[i] = new GuitarString(440 * Math.pow(1.05956, (i - 24)));
         }
@@ -18,7 +22,7 @@ public class GuitarHero {
         int version = 0;
         while (file.exists()) {
             version++;
-            file = new File("music"+ version +".txt");
+            file = new File("music" + version + ".txt");
         }
 
         file.createNewFile();
@@ -29,6 +33,10 @@ public class GuitarHero {
         int pTick = 0;
 
         do {
+            if(StdDraw.mousePressed()) {
+                StdDraw.setPenColor(Color.GREEN);
+                StdDraw.circle(StdDraw.mouseX(), StdDraw.mouseY(),0.05);
+            }
 
             if (StdDraw.hasNextKeyTyped()) {
                 if (pTick > 0) {
@@ -37,11 +45,15 @@ public class GuitarHero {
                 }
 
                 key = StdDraw.nextKeyTyped();
+                if(key == '1'){
+                    StdDraw.clear();
+                }
 
-                if(keyboard.contains(key+"")){
+                if (keyboard.contains(key + "")) {
                     writer.write(key);
                     notes[keyboard.indexOf(key)].pluck();
                 }
+
             } else {
                 pTick++;
             }
@@ -49,7 +61,7 @@ public class GuitarHero {
             writer.flush();
 
             double sample = 0;
-            for (GuitarString note:notes) {
+            for (GuitarString note : notes) {
                 sample += note.sample();
             }
 

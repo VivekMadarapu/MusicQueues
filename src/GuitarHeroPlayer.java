@@ -15,8 +15,8 @@ public class GuitarHeroPlayer {
         }
 
         Scanner console = new Scanner(System.in);
-        System.out.print("file: ");
-        Scanner file = new Scanner(new File(console.next()));
+        System.out.print("file #: ");
+        Scanner file = new Scanner(new File("music" + console.next() + ".txt"));
 
         int curPause = 0;
         String key = "";
