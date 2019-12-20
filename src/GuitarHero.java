@@ -11,7 +11,6 @@ public class GuitarHero {
 
         GuitarString[] notes = new GuitarString[37];
 
-
         StdDraw.setCanvasSize(500, 500);
 
         for (int i = 0; i < 37; i++) {
